@@ -4,18 +4,19 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.chicken_road.wingames"
+    namespace = "com.chicken.two"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.chicken_road.wingames"
+        applicationId = "com.chicken.two"
         minSdk = 24
         targetSdk = 35
-        versionCode = 3
-        versionName = "3.0"
+        versionCode = 1
+        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -66,4 +67,14 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(libs.androidx.browser)
+
+    implementation("com.google.android.gms:play-services-ads-identifier:18.1.0")
+    implementation("com.onesignal:OneSignal:4.8.10")
+    implementation ("com.appsflyer:af-android-sdk:6.15.2")
+    implementation("com.android.installreferrer:installreferrer:2.2")
+
+    implementation("com.google.firebase:firebase-database-ktx:21.0.0")
+
+    implementation ("com.airbnb.android:lottie-compose:6.4.0")
+
 }
