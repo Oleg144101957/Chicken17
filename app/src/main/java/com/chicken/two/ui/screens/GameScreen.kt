@@ -13,9 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.chicken.two.R
-import com.chicken.two.ui.theme.GreenBtn
+import com.chicken.two.ui.custom.ImageButton
 import com.chicken.two.util.lockOrientation
 import kotlinx.coroutines.delay
 import kotlin.random.Random
@@ -61,10 +61,11 @@ fun GameScreen(navController: NavController) {
     var isGameOver by remember { mutableStateOf(false) }
     var score by remember { mutableStateOf(0) }
 
+    var isFirstLaunch by remember { mutableStateOf(true) }
+
     val carImages = listOf(
         R.drawable.car1,
         R.drawable.car2,
-        R.drawable.car3
     )
 
     val cars = remember { mutableStateListOf<Pair<Offset, Int>>() }
@@ -85,8 +86,9 @@ fun GameScreen(navController: NavController) {
         cars.clear()
     }
 
-    LaunchedEffect(isGameOver) {
-        while (!isGameOver) {
+    // Генерация машин
+    LaunchedEffect(isGameOver, isFirstLaunch) {
+        while (!isGameOver && !isFirstLaunch) {
             delay(1000L)
             val laneX = canvasSize.width * lanes.random()
             val startY = -Random.nextInt(200, 800)
@@ -95,8 +97,9 @@ fun GameScreen(navController: NavController) {
         }
     }
 
-    LaunchedEffect(isGameOver) {
-        while (!isGameOver) {
+    // Движение машин
+    LaunchedEffect(isGameOver, isFirstLaunch) {
+        while (!isGameOver && !isFirstLaunch) {
             delay(16L)
             val carSpeed = baseCarSpeed + (score / 1000)
 
@@ -119,8 +122,9 @@ fun GameScreen(navController: NavController) {
         }
     }
 
-    LaunchedEffect(isGameOver) {
-        while (!isGameOver) {
+    // Счёт
+    LaunchedEffect(isGameOver, isFirstLaunch) {
+        while (!isGameOver && !isFirstLaunch) {
             delay(1L)
             score++
         }
@@ -131,7 +135,7 @@ fun GameScreen(navController: NavController) {
             .fillMaxSize()
             .pointerInput(Unit) {
                 detectTapGestures { offset ->
-                    if (!isGameOver) {
+                    if (!isGameOver && !isFirstLaunch) {
                         if (offset.x < canvasSize.width / 2) {
                             chickenX -= chickenStep
                         } else {
@@ -202,27 +206,42 @@ fun GameScreen(navController: NavController) {
                     modifier = Modifier.padding(bottom = 24.dp)
                 )
 
-                Button(
-                    onClick = { resetGame() },
-                    colors = ButtonDefaults.buttonColors(containerColor = GreenBtn)
-                ) {
-                    Text("Restart game!")
+                ImageButton("Restart Game", R.drawable.btn_bg, modifier = Modifier) {
+                    resetGame()
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                Button(
-                    onClick = { navController.popBackStack() },
-                    colors = ButtonDefaults.buttonColors(containerColor = GreenBtn)
-                ) {
-                    Text("Menu")
+                ImageButton("Menu", R.drawable.btn_bg, modifier = Modifier) {
+                    navController.popBackStack()
                 }
             }
+        }
+
+        if (isFirstLaunch) {
+            AlertDialog(
+                onDismissRequest = { },
+                confirmButton = {
+                    TextButton(onClick = { isFirstLaunch = false }) {
+                        Text("OK", color = Color.White)
+                    }
+                },
+                title = {
+                    Text("How to play", color = Color.White)
+                },
+                text = {
+                    Text(
+                        "Control the chicken and dodge the eggs and coins. If you catch them, the game is over.",
+                        color = Color.White
+                    )
+                },
+                containerColor = Color(0xFF333333)
+            )
         }
     }
 }
 
-// Функция столкновения
+
 fun circleIntersectsRect(circleCenter: Offset, radius: Float, rect: Rect): Boolean {
     val nearestX = circleCenter.x.coerceIn(rect.left, rect.right)
     val nearestY = circleCenter.y.coerceIn(rect.top, rect.bottom)

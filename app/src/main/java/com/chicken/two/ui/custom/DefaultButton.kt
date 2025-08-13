@@ -2,7 +2,10 @@ package com.chicken.two.ui.custom
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -10,10 +13,15 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -54,6 +62,51 @@ fun DefaultButton(
         )
     }
 }
+
+@Composable
+fun ImageButton(
+    text: String,
+    backgroundResId: Int,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
+            .clickable(enabled = enabled) { onClick() }
+            .background(Color.Transparent)
+    ) {
+        // Фон
+        Image(
+            painter = painterResource(id = backgroundResId),
+            contentDescription = null,
+            modifier = Modifier
+                .clip(RoundedCornerShape(16.dp)),
+            contentScale = ContentScale.Crop
+        )
+
+        // Текст поверх
+        Text(
+            text = text,
+            style = TextStyle(
+                fontFamily = FontFamily(Font(R.font.helvetica)),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                shadow = Shadow(
+                    color = Color.Black.copy(alpha = 0.6f),
+                    offset = Offset(2f, 2f),
+                    blurRadius = 4f
+                )
+            ),
+            modifier = Modifier
+                .align(Alignment.Center)
+
+        )
+    }
+}
+
 
 @Composable
 fun DefaultIconButton(iconRes: Int = R.drawable.ic_settings, onClick: () -> Unit) {

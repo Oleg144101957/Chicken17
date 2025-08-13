@@ -29,8 +29,8 @@ import androidx.navigation.NavController
 import com.chicken.two.R
 import com.chicken.two.navigation.ScreenRoutes
 import com.chicken.two.ui.custom.Background
-import com.chicken.two.ui.custom.DefaultButton
 import com.chicken.two.ui.custom.DefaultIconButton
+import com.chicken.two.ui.custom.ImageButton
 import com.chicken.two.ui.theme.DefFont
 import com.chicken.two.util.CustomTabsUtil
 import com.chicken.two.util.lockOrientation
@@ -81,20 +81,15 @@ fun SettingsScreen(navController: NavController, paddingValues: PaddingValues) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                DefaultButton(
-                    "Privacy Policy",
-                    modifier = Modifier.fillMaxWidth(0.8f)
-                ) {
+                ImageButton("Privacy Policy", R.drawable.btn_bg, modifier = Modifier) {
                     CustomTabsUtil.openCustomTab(
                         context,
                         "https://sites.google.com/view/bhxh9yck/bHxh9yCK"
                     )
                 }
+
                 Spacer(modifier = Modifier.height(16.dp))
-                DefaultButton(
-                    "About Us",
-                    modifier = Modifier.fillMaxWidth(0.8f)
-                ) {
+                ImageButton("About", R.drawable.btn_bg, modifier = Modifier) {
                     navController.navigate(ScreenRoutes.AboutScreen.route)
                 }
             }

@@ -4,15 +4,15 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.chicken_road.wingames",
+  "applicationId": "com.chicken.two",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 3,
-      "versionName": "3.0",
+      "versionCode": 1,
+      "versionName": "1.0",
       "outputFile": "app-release.apk"
     }
   ],
